@@ -82,7 +82,7 @@ class Checkout extends Component {
             const options = {
                 key:'rzp_test_eL2w4zKAPU2Iyn',
                 currency: 'INR',//data.currency,
-                amount: 100*100,
+                amount: price*100,
                 //order_id: data.id,
                 name: 'Ticket payment',
                 description: 'Thank you for booking with us.',
