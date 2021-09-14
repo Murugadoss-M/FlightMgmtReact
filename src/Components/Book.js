@@ -14,7 +14,7 @@ class Book extends Component {
             name: "",
             gender: "",
             age: 0,
-            data:{}
+            data: {}
         }
     }
 
@@ -49,16 +49,16 @@ class Book extends Component {
     //Add passenger to server
     addPassenger = (event) => {
         event.preventDefault();
-        axios.post("http://localhost:9000/booking/addpassenger",null, {
-            params:{
-            "name": this.state.name,
-            "gender": this.state.gender,
-            "age": this.state.age
-        }
+        axios.post("http://localhost:9000/booking/addpassenger", null, {
+            params: {
+                "name": this.state.name,
+                "gender": this.state.gender,
+                "age": this.state.age
+            }
         })
-        .then(response => response.data).then(data => this.setState({
-            passengers: data
-        }))
+            .then(response => response.data).then(data => this.setState({
+                passengers: data
+            }))
     }
 
 
@@ -73,7 +73,7 @@ class Book extends Component {
         }))
     }
 
-    
+
     //Book ticket calling payment portal
     bookTicket = (event) => {
         event.preventDefault();
@@ -82,11 +82,12 @@ class Book extends Component {
         else {
             axios.post("http://localhost:9000/booking/create", null, {
                 params: {
-                    "flightid": this.state.flight.flight_id
+                    "flightid": this.state.flight.flight_id,
+                    "username": this.state.data.userName
                 }
             }).then(this.props.history.push("/checkout"))
-              
-                
+
+
         }
     }
 

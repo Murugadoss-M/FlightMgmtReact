@@ -14,6 +14,9 @@ import Logout from './Components/Logout';
 import { Provider } from 'react-redux';
 import store from './Components/redux/store'
 import Checkout from './Components/Checkout';
+import Checkin from './Components/Checkin';
+import Booking from './Components/Booking';
+
 
 function App() {
   return (
@@ -25,14 +28,18 @@ function App() {
             <Route path="/login" component={LoginPage} />
             <Route path="/admin" component={Admin} />
             <Route path="/book/:id" component={Book} />
+            <Route path="/checkin" component={Checkin} />
             <Route path="/checkout" component={Checkout} />
             <Route path="/logout" component={Logout} />
             <Route path="/" exact component={Search} />
+            <Route path="/bookings" component={Booking}/>
 
           </Switch>
+          
         </div>
       </Router>
     </Provider>
+    
   );
 }
 export default App;

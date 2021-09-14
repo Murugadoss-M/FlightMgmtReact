@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { fetchUserData } from '../api/authenticationService'
-import { Badge,Button } from 'react-bootstrap'
+import { Badge, Button, Modal } from 'react-bootstrap'
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 class Checkout extends Component {
     constructor(props) {
@@ -11,7 +12,8 @@ class Checkout extends Component {
             booking: {},
             passengers: [],
             flight: {},
-            data: {}
+            data: {},
+            reference: null
         }
     }
     componentDidMount() {
@@ -50,10 +52,66 @@ class Checkout extends Component {
 
     }
 
+    loadScript = async (src) => {
+        return new Promise(res => {
+            const script = document.createElement("script");
+            script.src = src;
+            script.onload = () => {
+                res(true);
+            };
+            script.onerror = () => {
+                res(false);
+            };
+            document.body.appendChild(script);
+        })
+    };
+
+
+    displayRazorpay = (price) => {
+        try {
+            const res = this.loadScript('https://checkout.razorpay.com/v1/checkout.js');
+            if (!res) {
+                alert('Razorpay SDK failed to load. Are you online?')
+                return
+            }
+            // const data = fetch('http://localhost:1337/razorpay', { method: 'POST' }).then((t) =>
+            //     t.json())
+
+            // console.log(data)
+            var refer;
+            const options = {
+                key:'rzp_test_eL2w4zKAPU2Iyn',
+                currency: 'INR',//data.currency,
+                amount: 100*100,
+                //order_id: data.id,
+                name: 'Ticket payment',
+                description: 'Thank you for booking with us.',
+                handler: function (response) {
+                    axios.post("http://localhost:9000/booking/book")
+                    .then(response => refer= response.data)
+                  },
+                prefill: {
+                    name:'ABC Travels',
+                    email: 'sdfdsjfh2@ndsfdf.com',
+                    phone_number: '9899999999'
+                }
+            }
+            const paymentObject = new window.Razorpay(options)
+            paymentObject.open()
+            this.setState({reference:refer})
+            
+
+
+        } catch (error) {
+            console.log(error.message);
+        }
+
+    }
+
     render() {
         return (
             <div className="center">
-                <table className="center-table">
+                {this.state.reference === null && <table className="center-table">
                     <thead>
                         <tr>
                             <th>Title</th>
@@ -89,10 +147,30 @@ class Checkout extends Component {
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colSpan="2"><Button variant="primary">Pay</Button></td>
+                            <td colSpan="2"><Button variant="primary" onClick={()=>this.displayRazorpay(this.state.booking.price)}>Pay</Button></td>
                         </tr>
                     </tfoot>
-                </table>
+                </table>}
+                {this.state.reference &&
+                    <Modal.Dialog>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Booking confirmation</Modal.Title>
+                        </Modal.Header>
+
+                        <Modal.Body>
+                            <p>Thank you for your booking.</p>
+                            <p>Your reference number {this.state.reference}</p>
+                        </Modal.Body>
+
+                        <Modal.Footer>
+                            <Button variant="outline-dark"><strong><Link to="/">
+                                Home
+                            </Link></strong></Button>
+                            <Button variant="outline-dark"><strong><Link to="/checkin">
+                                CheckIn
+                            </Link></strong></Button>
+                        </Modal.Footer>
+                    </Modal.Dialog>}
             </div>
         )
     }

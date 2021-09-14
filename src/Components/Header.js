@@ -33,8 +33,10 @@ class Header extends Component {
                                     {this.state.data && <Nav.Link href="/logout">Logout</Nav.Link>}
                                     {this.state.data && this.state.data.roles && this.state.data.roles.filter(value => value.roleCode==='ADMIN').length>0 && <Nav.Link href="/admin/flight">Flights</Nav.Link> }
                                     {this.state.data && this.state.data.roles && this.state.data.roles.filter(value => value.roleCode==='ADMIN').length>0 && <Nav.Link href="/admin/bookings">All Bookings</Nav.Link> }
+                                    <Nav.Link href="/checkin">Check In</Nav.Link>
+                                    <Nav.Link href="/bookings">My Bookings</Nav.Link>
                                 </Nav>
-                               
+                                Hello {this.state.data && `${this.state.data.firstName} ${this.state.data.lastName}`}
                             </Navbar.Collapse>
                         </Container>
                     </Navbar>

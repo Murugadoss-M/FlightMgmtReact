@@ -98,7 +98,7 @@ class Search extends Component {
                                 </tr> :
                                 this.state.flights.map((flight) => <tr key={flight.flight_id}>
                                     <td><h4><Badge pill bg="light" text="dark">
-                                        {flight.airways_id}
+                                        {flight.airways}
                                     </Badge></h4></td>
                                     <td><h4><Badge pill bg="light" text="dark">
                                         {flight.from}

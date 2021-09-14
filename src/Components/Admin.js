@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { Component } from 'react'
 import { ButtonGroup, Button, Badge, Form } from 'react-bootstrap'
 import { fetchUserData } from '../api/authenticationService'
+//import display from './display'
 
 class Admin extends Component {
     constructor(props) {
@@ -90,6 +91,22 @@ class Admin extends Component {
             })
 
     }
+
+    cancelBooking=(booking_id)=>{
+        axios.post("http://localhost:9000/admin/cancel/booking",null,{
+            params:{
+                id:booking_id
+            }
+        }).then(response=>this.setState({bookings:response.data}))
+    }
+    activateBooking=(booking_id)=>{
+        axios.post("http://localhost:9000/admin/activate/booking",null,{
+            params:{
+                id:booking_id
+            }
+        }).then(response=>this.setState({bookings:response.data}))
+    }
+
     render() {
         return (
             <div>
@@ -185,7 +202,7 @@ class Admin extends Component {
                     <table className="center-table">
                         <thead>
                             <tr>
-                                <th>ID</th><th>Flight_id</th><th>Username</th><th>Date</th><th>Price</th><th>isActive</th>
+                                <th>ID</th><th>Flight_id</th><th>Username</th><th>Date</th><th>Price</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -196,10 +213,10 @@ class Admin extends Component {
                                     <td><Badge pill bg="light" text="dark">{booking.username}</Badge></td>
                                     <td><Badge pill bg="light" text="dark">{booking.date}</Badge></td>
                                     <td><Badge pill bg="light" text="dark">₹{booking.price}</Badge></td>
-                                    <td><Badge pill bg="light" text="dark">{booking.isCancelled}</Badge></td>
-                                    <td><Button variant="primary">Delete</Button></td>
+                                    <td><Button variant="primary" onClick={()=>this.cancelBooking(booking.booking_id)}>Cancel</Button></td>
+                                    <td><Button variant="primary" onClick={()=>this.activateBooking(booking.booking_id)}>Activate</Button></td>
                                 </tr>
-                            )}
+                            )} 
                         </tbody>
                     </table>
                 }
